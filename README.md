@@ -1,2 +1,3 @@
 TSLabExtended.Binance
-  BinancePosition - Получить значение позиции из бинанса. Для фьючерсов Usdt-M и Coin-M.
+
+BinancePosition - Получить значение позиции из бинанса. Для фьючерсов Usdt-M и Coin-M.
