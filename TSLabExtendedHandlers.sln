@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30804.86
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TSLabExtendedHandlers", "TSLabExtendedHandlers.csproj", "{70B46C8F-40C2-45B4-BD16-8FF68EB0FFE5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{70B46C8F-40C2-45B4-BD16-8FF68EB0FFE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70B46C8F-40C2-45B4-BD16-8FF68EB0FFE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70B46C8F-40C2-45B4-BD16-8FF68EB0FFE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70B46C8F-40C2-45B4-BD16-8FF68EB0FFE5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BF42246C-EB44-458B-B163-E7FA6FA89120}
+	EndGlobalSection
+EndGlobal
