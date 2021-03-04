@@ -122,13 +122,12 @@ namespace TSLabExtendedHandlers.Binance
 
         private static BinanceClient GetClient(ISecurity sec)
         {
-            return null;
-            //dynamic settings = sec.SecurityDescription.TradePlace.DataSource.Settings;
-            //string key = settings.Public;
-            //string secret = settings.Secret;
-            //var opt = new BinanceClientOptions();
-            //opt.ApiCredentials = new ApiCredentials(key, secret);
-            //return new BinanceClient(opt);
+            dynamic settings = sec.SecurityDescription.TradePlace.DataSource.Settings;
+            string key = settings.Public;
+            string secret = settings.Secret;
+            var opt = new BinanceClientOptions();
+            opt.ApiCredentials = new ApiCredentials(key, secret);
+            return new BinanceClient(opt);
         }
 
         private static BinancePlace GetBinancePlace(ISecurity sec)
