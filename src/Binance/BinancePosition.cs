@@ -1,7 +1,5 @@
 ﻿using Binance.Net;
 using Binance.Net.Objects.Futures.FuturesData;
-using Binance.Net.Objects.Spot;
-using CryptoExchange.Net.Authentication;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -59,8 +57,8 @@ namespace TSLabExtendedHandlers.Binance
                 return Enumerable.Repeat(item.Item2, sec.Bars.Count).ToList();
 
             var symbol = !string.IsNullOrWhiteSpace(Symbol) ? Symbol : sec.Symbol;
-            var client = GetClient(sec);
-            var place = GetBinancePlace(sec);
+            var client = BinanceCommon.GetClient(sec);
+            var place = BinanceCommon.GetBinancePlace(sec);
             var value = 0.0;
 
             try
@@ -90,13 +88,15 @@ namespace TSLabExtendedHandlers.Binance
             if (place == BinancePlace.FuturesUSDT)
             {
                 var res = client.FuturesUsdt.GetPositionInformation();
-                if (res.Error != null) throw new Exception(res.Error.ToString());
+                if (res.Error != null) 
+                    throw new Exception(res.Error.ToString());
                 pos = res.Data.FirstOrDefault(x => x.Symbol == symbol);
             }
             else if (place == BinancePlace.FuturesCOIN)
             {
                 var res = client.FuturesCoin.GetPositionInformation();
-                if (res.Error != null) throw new Exception(res.Error.ToString());
+                if (res.Error != null) 
+                    throw new Exception(res.Error.ToString());
                 pos = res.Data.FirstOrDefault(x => x.Symbol == symbol);
             }
 
@@ -119,45 +119,5 @@ namespace TSLabExtendedHandlers.Binance
             }
             return default;
         }
-
-        private static BinanceClient GetClient(ISecurity sec)
-        {
-            dynamic settings = sec.SecurityDescription.TradePlace.DataSource.Settings;
-            string key = settings.Public;
-            string secret = settings.Secret;
-            var opt = new BinanceClientOptions();
-            opt.ApiCredentials = new ApiCredentials(key, secret);
-            return new BinanceClient(opt);
-        }
-
-        private static BinancePlace GetBinancePlace(ISecurity sec)
-        {
-            var name = sec.SecurityDescription.TradePlace.DataSource.GetType().Name;
-            if (name.Contains("Coin"))
-                return BinancePlace.FuturesCOIN;
-            if (name.Contains("Futures"))
-                return BinancePlace.FuturesUSDT;
-            if (name.Contains("Margin"))
-                return BinancePlace.Margin;
-            return BinancePlace.Spot;
-        }
-    }
-
-    public enum BinancePositionField
-    {
-        PositionAmount,
-        EntryPrice,
-        Leverage,
-        LiquidationPrice,
-        MarkPrice,
-        UnrealizedProfit,
-    }
-
-    public enum BinancePlace
-    {
-        Spot,
-        FuturesUSDT,
-        FuturesCOIN,
-        Margin,
     }
 }

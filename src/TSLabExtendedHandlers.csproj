@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 
@@ -9,34 +9,24 @@
     <PackageReference Include="Binance.Net" Version="6.11.1" />
     <PackageReference Include="ILRepack.MSBuild.Task" Version="2.0.13" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="TSLab.DataSource">
-      <HintPath>C:\Program Files\TSLab\TSLab 2.1\TSLab.DataSource.dll</HintPath>
-    </Reference>
-    <Reference Include="TSLab.Script">
-      <HintPath>C:\Program Files\TSLab\TSLab 2.1\TSLab.Script.dll</HintPath>
-    </Reference>
-    <Reference Include="TSLab.Script.Handlers">
-      <HintPath>C:\Program Files\TSLab\TSLab 2.1\TSLab.Script.Handlers.dll</HintPath>
-    </Reference>
-    <Reference Include="TSLab.Utility">
-      <HintPath>C:\Program Files\TSLab\TSLab 2.1\TSLab.Utility.dll</HintPath>
-    </Reference>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+    <PackageReference Include="TSLab.DataSource" Version="2.2.1" />
+    <PackageReference Include="TSLab.Script" Version="2.2.1" />
+    <PackageReference Include="TSLab.Script.Handlers" Version="2.2.1" />
+    <PackageReference Include="TSLab.Utility" Version="2.2.1" />
   </ItemGroup>
 
   <Target Name="ILRepack" AfterTargets="Build">
 
     <PropertyGroup>
-        <WorkingDirectory>$(MSBuildThisFileDirectory)bin\$(Configuration)\$(TargetFramework)</WorkingDirectory>
+        <WorkingDirectory>$(OutputPath)</WorkingDirectory>
     </PropertyGroup>
 
     <ItemGroup>
         <InputAssemblies Include="Binance.Net.dll" />
         <InputAssemblies Include="Newtonsoft.Json.dll" />
         <InputAssemblies Include="CryptoExchange.Net.dll" />
+        <InputAssemblies Include="SuperSocket.ClientEngine.dll" />
         <InputAssemblies Include="WebSocket4Net.dll" />
     </ItemGroup>
 
