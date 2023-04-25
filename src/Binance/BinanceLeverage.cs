@@ -1,4 +1,5 @@
 ﻿using Binance.Net;
+using Binance.Net.Clients;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -71,7 +72,7 @@ namespace TSLabExtendedHandlers.Binance
             {
                 case BinancePlace.FuturesUSDT:
                     {
-                        var res = client.FuturesUsdt.ChangeInitialLeverage(symbol, leverage);
+                        var res = client.UsdFuturesApi.Account.ChangeInitialLeverageAsync(symbol, leverage).Result;
                         if (res.Error != null)
                             throw new Exception(res.Error.ToString());
                         return res.Data.Leverage;
@@ -79,7 +80,7 @@ namespace TSLabExtendedHandlers.Binance
 
                 case BinancePlace.FuturesCOIN:
                     {
-                        var res = client.FuturesCoin.ChangeInitialLeverage(symbol, leverage);
+                        var res = client.CoinFuturesApi.Account.ChangeInitialLeverageAsync(symbol, leverage).Result;
                         if (res.Error != null)
                             throw new Exception(res.Error.ToString());
                         return res.Data.Leverage;

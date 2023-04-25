@@ -1,5 +1,6 @@
 ﻿using Binance.Net;
-using Binance.Net.Objects.Futures.FuturesData;
+using Binance.Net.Clients;
+using Binance.Net.Objects.Models.Futures;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -87,14 +88,14 @@ namespace TSLabExtendedHandlers.Binance
             BinancePositionDetailsBase pos = null;
             if (place == BinancePlace.FuturesUSDT)
             {
-                var res = client.FuturesUsdt.GetPositionInformation();
+                var res = client.UsdFuturesApi.Account.GetPositionInformationAsync().Result;
                 if (res.Error != null) 
                     throw new Exception(res.Error.ToString());
                 pos = res.Data.FirstOrDefault(x => x.Symbol == symbol);
             }
             else if (place == BinancePlace.FuturesCOIN)
             {
-                var res = client.FuturesCoin.GetPositionInformation();
+                var res = client.CoinFuturesApi.Account.GetPositionInformationAsync().Result;
                 if (res.Error != null) 
                     throw new Exception(res.Error.ToString());
                 pos = res.Data.FirstOrDefault(x => x.Symbol == symbol);
@@ -105,7 +106,7 @@ namespace TSLabExtendedHandlers.Binance
             switch (field)
             {
                 case BinancePositionField.PositionAmount:
-                    return (double)pos.PositionAmount;
+                    return (double)pos.Quantity;
                 case BinancePositionField.EntryPrice:
                     return (double)pos.EntryPrice;
                 case BinancePositionField.Leverage:
@@ -115,7 +116,7 @@ namespace TSLabExtendedHandlers.Binance
                 case BinancePositionField.MarkPrice:
                     return (double)pos.MarkPrice;
                 case BinancePositionField.UnrealizedProfit:
-                    return (double)pos.UnrealizedProfit;
+                    return (double)pos.UnrealizedPnl;
             }
             return default;
         }

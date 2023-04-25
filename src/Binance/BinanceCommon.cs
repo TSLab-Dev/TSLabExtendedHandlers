@@ -1,5 +1,6 @@
 ﻿using Binance.Net;
-using Binance.Net.Objects.Spot;
+using Binance.Net.Clients;
+using Binance.Net.Objects;
 using CryptoExchange.Net.Authentication;
 using TSLab.Script;
 
@@ -7,13 +8,19 @@ namespace TSLabExtendedHandlers.Binance
 {
     public static class BinanceCommon
     {
+        public static BinanceClient GetClient()
+        {
+            var opt = new BinanceClientOptions();
+            return new BinanceClient(opt);
+        }
+
         public static BinanceClient GetClient(ISecurity sec)
         {
             dynamic settings = sec.SecurityDescription.TradePlace.DataSource.Settings;
             string key = settings.Public;
             string secret = settings.Secret;
             var opt = new BinanceClientOptions();
-            opt.ApiCredentials = new ApiCredentials(key, secret);
+            opt.ApiCredentials = new BinanceApiCredentials(key, secret);
             return new BinanceClient(opt);
         }
 
@@ -46,5 +53,15 @@ namespace TSLabExtendedHandlers.Binance
         FuturesUSDT,
         FuturesCOIN,
         Margin,
+    }
+
+    public enum BinanceSpotFilters
+    {
+        MinimumTradeAmount, // LOT_SIZE.minQty
+        MinimumAmountMovement, // LOT_SIZE.stepSize
+        MinimumPriceMovement, // PRICE_FILTER.tickSize
+        MinimumOrderSize, // NOTIONAL.minNotional
+        MaximumMarketOrderAmount, // MARKET_LOT_SIZE.maxQty
+        MaxNumberOfOpenLimitOrders, // MAX_NUM_ORDERS.maxNumOrders
     }
 }
