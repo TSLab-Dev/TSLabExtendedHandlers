@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <PackageReference Include="Binance.Net" Version="8.5.1" />
+    <PackageReference Include="Bybit.Net" Version="2.0.5" />
     <PackageReference Include="ILRepack.MSBuild.Task" Version="2.0.13" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
@@ -24,6 +25,7 @@
 
     <ItemGroup>
         <InputAssemblies Include="Binance.Net.dll" />
+		<InputAssemblies Include="Bybit.Net.dll" />
         <InputAssemblies Include="Newtonsoft.Json.dll" />
         <InputAssemblies Include="CryptoExchange.Net.dll" />
     </ItemGroup>

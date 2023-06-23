@@ -4,17 +4,36 @@ namespace TestConsole
 {
     internal class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             // чтобы запустить нужно в проекте закомментировать <Target Name="ILRepack" AfterTargets="Build">
+            //TestBinanceTradingRules();
+            TestBybitTradingRules();
+            Console.ReadKey();
+        }
+
+        static void TestBinanceTradingRules()
+        {
             var symbol = "BNBDAI";
             var client = BinanceCommon.GetClient();
-            var MinimumTradeAmount = BinanceSpotTradingRules.GetValue(null, client, symbol, BinanceSpotFilters.MinimumTradeAmount);
-            var MinimumAmountMovement = BinanceSpotTradingRules.GetValue(null, client, symbol, BinanceSpotFilters.MinimumAmountMovement);
-            var MinimumPriceMovement = BinanceSpotTradingRules.GetValue(null, client, symbol, BinanceSpotFilters.MinimumPriceMovement);
-            var MinimumOrderSize = BinanceSpotTradingRules.GetValue(null, client, symbol, BinanceSpotFilters.MinimumOrderSize);
-            var MaximumMarketOrderAmount = BinanceSpotTradingRules.GetValue(null, client, symbol, BinanceSpotFilters.MaximumMarketOrderAmount);
-            var MaxNumberOfOpenLimitOrders = BinanceSpotTradingRules.GetValue(null, client, symbol, BinanceSpotFilters.MaxNumberOfOpenLimitOrders);
+            Console.WriteLine(symbol);
+            foreach (BinanceSpotFilters item in Enum.GetValues(typeof(BinanceSpotFilters)))
+            {
+                var value = BinanceSpotTradingRules.GetValue(null, client, symbol, item);
+                Console.WriteLine($"{item}: {value}");
+            }
+        }
+
+        static void TestBybitTradingRules()
+        {
+            var symbol = "BTCUSDT";
+            var client = BybitCommon.GetClient();
+            Console.WriteLine(symbol);
+            foreach (BybitFilters item in Enum.GetValues(typeof(BybitFilters)))
+            {
+                var value = BybitTradingRules.GetValue(null, client, symbol, item);
+                Console.WriteLine($"{item}: {value}");
+            }
         }
     }
 }
