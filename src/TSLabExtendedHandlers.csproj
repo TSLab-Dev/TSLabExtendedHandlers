@@ -11,10 +11,10 @@
     <PackageReference Include="ILRepack.MSBuild.Task" Version="2.0.13" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
-    <PackageReference Include="TSLab.DataSource" Version="2.2.1" />
-    <PackageReference Include="TSLab.Script" Version="2.2.1" />
-    <PackageReference Include="TSLab.Script.Handlers" Version="2.2.1" />
-    <PackageReference Include="TSLab.Utility" Version="2.2.1" />
+    <PackageReference Include="TSLab.DataSource" Version="2.2.2" />
+    <PackageReference Include="TSLab.Script" Version="2.2.2" />
+    <PackageReference Include="TSLab.Script.Handlers" Version="2.2.2" />
+    <PackageReference Include="TSLab.Utility" Version="2.2.2" />
   </ItemGroup>
 
   <Target Name="ILRepack" AfterTargets="Build">

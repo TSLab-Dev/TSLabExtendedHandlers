@@ -7,14 +7,14 @@ namespace TestConsole
         static void Main()
         {
             // чтобы запустить нужно в проекте закомментировать <Target Name="ILRepack" AfterTargets="Build">
-            //TestBinanceTradingRules();
-            TestBybitTradingRules();
+            TestBinanceTradingRules();
+            //TestBybitTradingRules();
             Console.ReadKey();
         }
 
         static void TestBinanceTradingRules()
         {
-            var symbol = "BNBDAI";
+            var symbol = "BTCUSDT";
             var client = BinanceCommon.GetClient();
             Console.WriteLine(symbol);
             foreach (BinanceSpotFilters item in Enum.GetValues(typeof(BinanceSpotFilters)))

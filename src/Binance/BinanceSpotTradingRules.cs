@@ -1,5 +1,6 @@
 ﻿using Binance.Net.Clients;
 using Binance.Net.Objects.Models.Spot;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -57,29 +58,67 @@ namespace TSLabExtendedHandlers.Binance
 
         public static double GetValue(IContext ctx, BinanceClient client, string symbol, BinanceSpotFilters field)
         {
-            var key = $"BinanceSpotTradingRules.{DateTime.Now:dd.MM.yyyy}";
-            var res = ctx == null 
-                ? LoadExchangeInfo(client)
-                : ctx.LoadGlobalObject(key, () => LoadExchangeInfo(client), fromStorage: false);
-            var item = res.Symbols.FirstOrDefault(x => x.Name == symbol);
+            var symbols = TryLoadBinanceSpotSymbolsFromCache(ctx, client);
+            symbols ??= LoadBinanceSpotSymbols(client);
+
+            var item = symbols.FirstOrDefault(x => x.Name == symbol);
             if (item == null) return default;
 
             switch (field)
             {
                 case BinanceSpotFilters.MinimumTradeAmount:
-                    return (double)item.LotSizeFilter.MinQuantity;
+                    return item.MinimumTradeAmount;
                 case BinanceSpotFilters.MinimumAmountMovement:
-                    return (double)item.LotSizeFilter.StepSize;
+                    return item.MinimumAmountMovement;
                 case BinanceSpotFilters.MinimumPriceMovement:
-                    return (double)item.PriceFilter.TickSize;
+                    return item.MinimumPriceMovement;
                 case BinanceSpotFilters.MinimumOrderSize:
-                    return (double)item.NotionalFilter.MinNotional;
+                    return item.MinimumOrderSize;
                 case BinanceSpotFilters.MaximumMarketOrderAmount:
-                    return (double)item.MarketLotSizeFilter.MaxQuantity;
+                    return item.MaximumMarketOrderAmount;
                 case BinanceSpotFilters.MaxNumberOfOpenLimitOrders:
-                    return (double)item.MaxOrdersFilter.MaxNumberOrders;
+                    return item.MaxNumberOfOpenLimitOrders;
             }
             return default;
+        }
+
+        private static List<BinanceSpotSymbol> TryLoadBinanceSpotSymbolsFromCache(IContext ctx, BinanceClient client)
+        {
+            if (ctx == null)
+                return null;
+            try
+            {
+                var json = ctx.LoadGlobalObject($"BinanceSpotTradingRules.V2.{DateTime.Now:dd.MM.yyyy}", () =>
+                {
+                    var values = LoadBinanceSpotSymbols(client);
+                    return JsonConvert.SerializeObject(values);
+                }, fromStorage: false);
+
+                var symbols = JsonConvert.DeserializeObject<List<BinanceSpotSymbol>>(json);
+                return symbols;
+            }
+            catch 
+            { }
+            return null;
+        }
+
+        private static List<BinanceSpotSymbol> LoadBinanceSpotSymbols(BinanceClient client)
+        {
+            var info = LoadExchangeInfo(client);
+            var res = info.Symbols.Select(x =>
+            {
+                return new BinanceSpotSymbol
+                {
+                    Name = x.Name,
+                    MinimumTradeAmount = (double?)x.LotSizeFilter?.MinQuantity ?? 0,
+                    MinimumAmountMovement = (double?)x.LotSizeFilter?.StepSize ?? 0,
+                    MinimumPriceMovement = (double?)x.PriceFilter?.TickSize ?? 0,
+                    MinimumOrderSize = (double?)x.NotionalFilter?.MinNotional ?? 0,
+                    MaximumMarketOrderAmount = (double?)x.MarketLotSizeFilter?.MaxQuantity ?? 0,
+                    MaxNumberOfOpenLimitOrders = x.MaxOrdersFilter?.MaxNumberOrders ?? 0,
+                };
+            }).ToList();
+            return res;
         }
 
         private static BinanceExchangeInfo LoadExchangeInfo(BinanceClient client)
@@ -94,6 +133,21 @@ namespace TSLabExtendedHandlers.Binance
                 Thread.Sleep(1000);
             }
             throw new Exception($"BinanceSpotTradingRules: {error ?? "Не удалось загрузить данные."}");
+        }
+
+        private class BinanceSpotSymbol
+        {
+            public string Name { get; set; }
+            public double MinimumTradeAmount { get; set; }
+            public double MinimumAmountMovement { get; set; }
+            public double MinimumPriceMovement { get; set; }
+            public double MinimumOrderSize { get; set; }
+            public double MaximumMarketOrderAmount { get; set; }
+            public double MaxNumberOfOpenLimitOrders { get; set; }
+            public override string ToString()
+            {
+                return Name;
+            }
         }
     }
 }
