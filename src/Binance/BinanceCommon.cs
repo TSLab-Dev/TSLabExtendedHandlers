@@ -1,7 +1,6 @@
-﻿using Binance.Net;
-using Binance.Net.Clients;
+﻿using Binance.Net.Clients;
 using Binance.Net.Objects;
-using CryptoExchange.Net.Authentication;
+using System;
 using TSLab.Script;
 
 namespace TSLabExtendedHandlers.Binance
@@ -19,8 +18,11 @@ namespace TSLabExtendedHandlers.Binance
             dynamic settings = sec.SecurityDescription.TradePlace.DataSource.Settings;
             string key = settings.Public;
             string secret = settings.Secret;
-            var opt = new BinanceClientOptions();
-            opt.ApiCredentials = new BinanceApiCredentials(key, secret);
+            var opt = new BinanceClientOptions
+            {
+                ReceiveWindow = TimeSpan.FromSeconds(30),
+                ApiCredentials = new BinanceApiCredentials(key, secret)
+            };
             return new BinanceClient(opt);
         }
 
